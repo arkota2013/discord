@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Submission Form</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f4f7f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .form-container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+    h2 {
+      margin-top: 0;
+      color: #333;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .input-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      background-color: #fafafa;
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+    }
+    input[type="text"]:focus {
+      border-color: #007bff;
+      background-color: #fff;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+    }
+    button {
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .status-msg {
+      margin-top: 15px;
+      font-size: 14px;
+      text-align: center;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <h2>Submit Response</h2>
+  <form id="submissionForm">
+    <div class="input-group">
+      <label for="user_answer">Your Answer</label>
+      <input type="text" id="user_answer" name="user_answer" placeholder="Type your response here..." required>
+    </div>
+    <button type="submit" id="submitBtn">Send Response</button>
+  </form>
+  <div id="status" class="status-msg"></div>
+</div>
+
+<script>
+  // REPLACE THE LINK BELOW WITH YOUR GOOGLE WEB APP URL
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbzPm_lj1y0dKp2o-fPDwYiVvclz-TFzUuq7iKb4enAEUnMHFB-GMQS8e1Lmq0CtKwKA/exec';
+  const form = document.getElementById('submissionForm');
+  const statusMsg = document.getElementById('status');
+  const submitBtn = document.getElementById('submitBtn');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.innerText = 'Sending...';
+    statusMsg.style.display = 'block';
+    statusMsg.style.color = '#666';
+    statusMsg.innerText = 'Submitting your answer...';
+
+    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+      .then(response => {
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Send Response';
+        statusMsg.style.color = '#28a745';
+        statusMsg.innerText = 'Success! Your answer has been emailed.';
+        form.reset();
+      })
+      .catch(error => {
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Send Response';
+        statusMsg.style.color = '#dc3545';
+        statusMsg.innerText = 'Error submitting response. Try again.';
+        console.error('Error!', error.message);
+      });
+  });
+</script>
+
+</body>
+</html>
